@@ -28,7 +28,7 @@ const s3 = new AWS.S3();
 // uploading file
 async function uploadFile(file) {
     const params = {
-        Bucket: "saikumar-files",
+        Bucket: "ec2s3upload",
         Key: `uploads-${Date.now()}-${file.name}`,
         Body: file.data,
         // ACL: 'private'
@@ -75,18 +75,18 @@ app.post("/create", async (req, res) => {
 })
 app.get("/files", async (req, res) => {
     try {
-        const data = await s3.listObjectsV2({ Bucket: "saikumar-files" }).promise();
+        const data = await s3.listObjectsV2({ Bucket: "ec2s3upload" }).promise();
         console.log('list objects',data)
         let files = []
         data.Contents.forEach(content => {
             const fileParams = {
-                Bucket: "saikumar-files",
+                Bucket: "ec2s3upload",
                 Key: content.Key
             };
 
             data.Contents.forEach(content => {
                 const url = s3.getSignedUrl('getObject', {
-                    Bucket: "saikumar-files",
+                    Bucket: "ec2s3upload",
                     Key: content.Key
                 });
                 console.log(url);
